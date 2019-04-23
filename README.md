@@ -2,7 +2,7 @@
 Project made for subject "Programming Platforms"  
 
 Main page  
-![alt text](https://imgur.com/a/DoqWtGe)  
+![alt text](https://i.imgur.com/DoqWtGe.png)  
 
 Item list page  
 ![alt text](https://i.imgur.com/Aujf4Fh.png)    
