@@ -1,6 +1,6 @@
 # animal-store
 Project made for subject "Programming Platforms"  
-Default accounts:
+Default accounts:  
 Login/password
 - admin/admin  
 - user/user  
