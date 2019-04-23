@@ -1,8 +1,13 @@
 # animal-store
 Project made for subject "Programming Platforms"  
+Default accounts:
+Login/password
+- admin/admin  
+- user/user  
+- user2/user2  
 
 Main page  
-![alt text](https://i.imgur.com/DoqWtGe.png)  
+![alt text](https://i.imgur.com/8eXul6v.jpg)  
 
 Item list page  
 ![alt text](https://i.imgur.com/Aujf4Fh.png)    
