@@ -1,6 +1,6 @@
 # Animal store
 Project made for subject "Programming Platforms"  
-Try live demo:    
+## Try live demo:    
 https://animal-store.herokuapp.com/    
 ## Default accounts:  
 Login/password
