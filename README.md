@@ -1,5 +1,5 @@
 # Animal store
-Project made for subject "Programming Platforms"  
+Spring MVC, Hibernate, JSP
 ## Try live demo:    
 https://animal-store.herokuapp.com/    
 ## Default accounts:  
