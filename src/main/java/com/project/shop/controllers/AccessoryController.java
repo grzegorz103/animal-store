@@ -19,122 +19,110 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @Controller
-@RequestMapping ("/accessory")
-@SessionAttributes ("searchForm")
-public class AccessoryController
-{
-        private final AccessoryService accessoryService;
+@RequestMapping("/accessory")
+@SessionAttributes("searchForm")
+public class AccessoryController {
+    private final AccessoryService accessoryService;
 
-        @Autowired
-        public AccessoryController ( AccessoryService accessoryService )
-        {
-                this.accessoryService = accessoryService;
+    @Autowired
+    public AccessoryController(AccessoryService accessoryService) {
+        this.accessoryService = accessoryService;
+    }
+
+    @RequestMapping(value = "/list", method = {RequestMethod.GET, RequestMethod.POST})
+    public String getPetList(@ModelAttribute("searchForm") SearchForm searchForm,
+                             Model model,
+                             Pageable pageable) {
+        model.addAttribute("accessory_list", accessoryService.getAllAccessories(pageable, searchForm));
+        model.addAttribute("cart_item", new CartItem());
+        return "accessoryList";
+    }
+
+    @ModelAttribute("searchForm")
+    public SearchForm loadForm() {
+        return new SearchForm();
+    }
+
+
+    @PostMapping("/add")
+    public String saveAccessory(@Valid @ModelAttribute("accessory") Accessory accessory,
+                                BindingResult bindingResult,
+                                MultipartFile[] multipartFile,
+                                HttpServletRequest httpRequest) throws IOException {
+        if (bindingResult.hasErrors())
+            throw new InvalidDataException();
+
+        accessoryService.save(accessory, multipartFile, httpRequest);
+        return "redirect:/";
+    }
+
+
+    @GetMapping("/{id}")
+    public String showAccessory(@PathVariable long id,
+                                Model model) {
+        if (!accessoryService.getAccessory(id).isPresent())
+            throw new ItemNotFoundException();
+
+        model.addAttribute("cart_item", new CartItem());
+        model.addAttribute("animal", accessoryService.getAccessory(id).get());
+        return "itemPage";
+    }
+
+
+    @PostMapping("/buy")
+    public String addToCart(@ModelAttribute CartItem cartItem,
+                            @RequestParam(value = "id") Accessory item,
+                            Model model) {
+        if (item == null)
+            throw new RuntimeException("Brak produktu o takim id");
+        if (cartItem.getAmount() > item.getAmount()) {
+            model.addAttribute("info", "Brak dostępności przedmiotu " + item.getName());
+            return "forward:/accessory/list";
         }
 
-        @RequestMapping (value = "/list", method = {RequestMethod.GET, RequestMethod.POST})
-        public String getPetList ( @ModelAttribute ("searchForm") SearchForm searchForm,
-                                   Model model,
-                                   Pageable pageable )
-        {
-                model.addAttribute( "accessory_list", accessoryService.getAllAccessories( pageable, searchForm ) );
-                model.addAttribute( "cart_item", new CartItem() );
-                return "accessoryList";
-        }
-
-        @ModelAttribute ("searchForm")
-        public SearchForm loadForm ()
-        {
-                return new SearchForm();
-        }
+        cartItem.setItem(item);
+        accessoryService.addToCart(cartItem, item);
+        return "redirect:/user/cart";
+    }
 
 
-        @PostMapping ("/add")
-        public String saveAccessory ( @Valid @ModelAttribute ("accessory") Accessory accessory,
-                                      BindingResult bindingResult,
-                                      MultipartFile[] multipartFile,
-                                      HttpServletRequest httpRequest ) throws IOException
-        {
-                if ( bindingResult.hasErrors() )
-                        throw new InvalidDataException();
-
-                accessoryService.save( accessory, multipartFile, httpRequest );
-                return "redirect:/";
-        }
+    @GetMapping("/acc/{id}")
+    public String showAnimalsByType(@PathVariable("id") Type type,
+                                    @ModelAttribute("searchForm") SearchForm searchForm,
+                                    Model model,
+                                    Pageable pageable) {
+        model.addAttribute("accessory_list", accessoryService.getAccessoryByType(type, pageable));
+        model.addAttribute("cart_item", new CartItem());
+        return "accessoryList";
+    }
 
 
-        @GetMapping ("/{id}")
-        public String showAccessory ( @PathVariable long id,
-                                      Model model )
-        {
-                if ( !accessoryService.getAccessory( id ).isPresent() )
-                        throw new ItemNotFoundException();
+    @GetMapping("/edit/{id}")
+    public String editAccessory(@PathVariable("id") Accessory accessory,
+                                Model model) {
+        model.addAttribute("animal", accessory);
 
-                model.addAttribute( "cart_item", new CartItem() );
-                model.addAttribute( "animal", accessoryService.getAccessory( id ).get() );
-                return "itemPage";
-        }
+        return "editAccessoryPage";
+    }
 
 
-        @PostMapping ("/buy")
-        public String addToCart ( @ModelAttribute CartItem cartItem,
-                                  @RequestParam (value = "id") Accessory item,
-                                  Model model )
-        {
-                if ( item == null )
-                        throw new RuntimeException( "Brak produktu o takim id" );
-                if ( cartItem.getAmount() > item.getAmount() )
-                {
-                        model.addAttribute( "info", "Brak dostępności przedmiotu " + item.getName() );
-                        return "forward:/accessory/list";
-                }
+    @PostMapping("/update")
+    public String updateAccessory(@Valid @ModelAttribute("animal") Accessory accessory,
+                                  BindingResult bindingResult,
+                                  MultipartFile[] multipartFile,
+                                  HttpServletRequest httpServletRequest) throws IOException {
+        if (bindingResult.hasErrors())
+            return "editAccessoryPage";
 
-                cartItem.setItem( item );
-                accessoryService.addToCart( cartItem, item );
-                return "redirect:/user/cart";
-        }
+        accessoryService.update(accessory, multipartFile, httpServletRequest);
+        return "redirect:/";
+    }
 
 
-        @GetMapping ("/acc/{id}")
-        public String showAnimalsByType ( @PathVariable ("id") Type type,
-                                          @ModelAttribute ("searchForm") SearchForm searchForm,
-                                          Model model,
-                                          Pageable pageable )
-        {
-                model.addAttribute( "accessory_list", accessoryService.getAccessoryByType( type, pageable ) );
-                model.addAttribute( "cart_item", new CartItem() );
-                return "accessoryList";
-        }
-
-
-        @GetMapping ("/edit/{id}")
-        public String editAccessory ( @PathVariable ("id") Accessory accessory,
-                                      Model model )
-        {
-                model.addAttribute( "animal", accessory );
-
-                return "editAccessoryPage";
-        }
-
-
-        @PostMapping ("/update")
-        public String updateAccessory ( @Valid @ModelAttribute ("animal") Accessory accessory,
-                                        BindingResult bindingResult,
-                                        MultipartFile[] multipartFile,
-                                        HttpServletRequest httpServletRequest ) throws IOException
-        {
-                if ( bindingResult.hasErrors() )
-                        return "editAccessoryPage";
-
-                accessoryService.update( accessory, multipartFile, httpServletRequest );
-                return "redirect:/";
-        }
-
-
-        @Secured ("ROLE_ADMIN")
-        @GetMapping ("/delete/{id}")
-        public String deleteFeed ( @PathVariable ("id") Accessory accessory )
-        {
-                accessoryService.delete( accessory );
-                return "redirect:/accessory/list";
-        }
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/delete/{id}")
+    public String deleteFeed(@PathVariable("id") Accessory accessory) {
+        accessoryService.delete(accessory);
+        return "redirect:/accessory/list";
+    }
 }

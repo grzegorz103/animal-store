@@ -1,5 +1,4 @@
 package com.project.shop.utils;
 
-public class Constants
-{
+public class Constants {
 }

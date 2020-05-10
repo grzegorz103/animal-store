@@ -7,25 +7,24 @@ import com.project.shop.models.Order;
 
 import java.util.List;
 
-public interface ShoppingService
-{
-        void addToCart ( CartItem cartItem );
+public interface ShoppingService {
+    void addToCart(CartItem cartItem);
 
-        void createOrder ();
+    void createOrder();
 
-        void deleteFromCart ( Integer item );
+    void deleteFromCart(Integer item);
 
-        List<List<Order>> getUserOrders ();
+    List<List<Order>> getUserOrders();
 
-        List<List<Order>> getAllOrders ();
+    List<List<Order>> getAllOrders();
 
-        Cart getCart ();
+    Cart getCart();
 
-        void changeOrderStatus ( int id );
+    void changeOrderStatus(int id);
 
-        String existsInDatabase () throws RuntimeException;
+    String existsInDatabase() throws RuntimeException;
 
-        void cancelOrder ( int id );
+    void cancelOrder(int id);
 
-        boolean isUserDetailsCorrect ();
+    boolean isUserDetailsCorrect();
 }

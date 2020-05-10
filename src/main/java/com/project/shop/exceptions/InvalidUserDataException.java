@@ -1,9 +1,7 @@
 package com.project.shop.exceptions;
 
-public class InvalidUserDataException extends RuntimeException
-{
-        public InvalidUserDataException ()
-        {
-                super();
-        }
+public class InvalidUserDataException extends RuntimeException {
+    public InvalidUserDataException() {
+        super();
+    }
 }

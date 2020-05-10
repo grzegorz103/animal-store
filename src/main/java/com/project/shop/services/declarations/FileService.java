@@ -6,7 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-public interface FileService
-{
-        void save ( MultipartFile multipartFile, HttpServletRequest httpRequest ) throws IOException;
+public interface FileService {
+    void save(MultipartFile multipartFile, HttpServletRequest httpRequest) throws IOException;
 }

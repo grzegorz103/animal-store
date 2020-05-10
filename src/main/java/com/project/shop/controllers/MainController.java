@@ -18,13 +18,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 @Controller
-@SessionAttributes ("shoppingCart")
-public class MainController
-{
-        @GetMapping ("/main")
-        public String mainRedirect ( Model model )
-        {
-                return "mainPage";
-        }
+@SessionAttributes("shoppingCart")
+public class MainController {
+    @GetMapping("/main")
+    public String mainRedirect(Model model) {
+        return "mainPage";
+    }
 
 }

@@ -13,23 +13,22 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PetRepository extends JpaRepository<Pet, Long>
-{
-        @Query ("select p from Pet p where " +
-                "(" +
-                ":phrase is null OR :phrase = '' OR " +
-                "lower(p.name) = lower(:phrase)" +
-                ") " +
-                "AND " +
-                "(:minPrice is null OR :minPrice <= p.price) " +
-                "AND (:maxPrice is null OR :maxPrice >= p.price)" +
-                "AND (p.sold = false )" +
-                "AND (p.deleted = false)")
-        Page<Pet> findByFilter ( @Param ("phrase") String phrase,
-                                 @Param ("maxPrice") Float maxPrice,
-                                 @Param ("minPrice") Float minPrice,
-                                 Pageable pageable );
+public interface PetRepository extends JpaRepository<Pet, Long> {
+    @Query("select p from Pet p where " +
+            "(" +
+            ":phrase is null OR :phrase = '' OR " +
+            "lower(p.name) = lower(:phrase)" +
+            ") " +
+            "AND " +
+            "(:minPrice is null OR :minPrice <= p.price) " +
+            "AND (:maxPrice is null OR :maxPrice >= p.price)" +
+            "AND (p.sold = false )" +
+            "AND (p.deleted = false)")
+    Page<Pet> findByFilter(@Param("phrase") String phrase,
+                           @Param("maxPrice") Float maxPrice,
+                           @Param("minPrice") Float minPrice,
+                           Pageable pageable);
 
-        Page<Pet> findAllByType ( Type type, Pageable pageable );
+    Page<Pet> findAllByType(Type type, Pageable pageable);
 
 }

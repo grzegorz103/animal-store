@@ -26,124 +26,112 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping ("/pet")
-@SessionAttributes ("searchForm")
-public class PetController
-{
-        private final PetService petService;
+@RequestMapping("/pet")
+@SessionAttributes("searchForm")
+public class PetController {
+    private final PetService petService;
 
-        @Autowired
-        public PetController ( PetService petService )
-        {
-                this.petService = petService;
-        }
+    @Autowired
+    public PetController(PetService petService) {
+        this.petService = petService;
+    }
 
 
-        @RequestMapping (value = "/list", method = {RequestMethod.GET, RequestMethod.POST})
-        public String getPetList ( @ModelAttribute ("searchForm") SearchForm searchForm,
-                                   Model model,
-                                   Pageable pageable )
-        {
-                model.addAttribute( "pet_list", petService.getAllPets( pageable, searchForm ) );
-                model.addAttribute( "cart_item", new CartItem() );
-                return "petList";
-        }
+    @RequestMapping(value = "/list", method = {RequestMethod.GET, RequestMethod.POST})
+    public String getPetList(@ModelAttribute("searchForm") SearchForm searchForm,
+                             Model model,
+                             Pageable pageable) {
+        model.addAttribute("pet_list", petService.getAllPets(pageable, searchForm));
+        model.addAttribute("cart_item", new CartItem());
+        return "petList";
+    }
 
-        @ModelAttribute ("searchForm")
-        public SearchForm loadForm ()
-        {
-                return new SearchForm();
-        }
+    @ModelAttribute("searchForm")
+    public SearchForm loadForm() {
+        return new SearchForm();
+    }
 
-        @GetMapping ("/clear")
-        public String clearSearchForm ( @ModelAttribute ("searchForm") SearchForm searchForm )
-        {
-                searchForm.clear();
-                return "redirect:/";
-        }
+    @GetMapping("/clear")
+    public String clearSearchForm(@ModelAttribute("searchForm") SearchForm searchForm) {
+        searchForm.clear();
+        return "redirect:/";
+    }
 
 
-        @PostMapping ("/add")
-        public String saveAnimal ( @Valid @ModelAttribute ("animal") Pet animal,
-                                   BindingResult bindingResult,
-                                   MultipartFile[] multipartFile,
-                                   HttpServletRequest httpRequest ) throws IOException
-        {
-                if ( bindingResult.hasErrors() )
-                        throw new InvalidDataException();
+    @PostMapping("/add")
+    public String saveAnimal(@Valid @ModelAttribute("animal") Pet animal,
+                             BindingResult bindingResult,
+                             MultipartFile[] multipartFile,
+                             HttpServletRequest httpRequest) throws IOException {
+        if (bindingResult.hasErrors())
+            throw new InvalidDataException();
 
-                petService.save( animal, multipartFile, httpRequest );
-                return "redirect:/";
-        }
-
-
-        @RequestMapping (value = "/buy", method = {RequestMethod.POST, RequestMethod.GET})
-        public String addToCart ( @ModelAttribute CartItem cartItem,
-                                  @RequestParam (value = "id") Pet item )
-        {
-
-                if ( item == null )
-                        throw new ItemNotFoundException();
-
-                cartItem.setItem( item );
-                petService.addToCart( cartItem );
-                return "redirect:/user/cart";
-        }
+        petService.save(animal, multipartFile, httpRequest);
+        return "redirect:/";
+    }
 
 
-        @GetMapping ("/{id}")
-        public String showAnimal ( @PathVariable long id,
-                                   Model model )
-        {
-                if ( !petService.getAnimal( id ).isPresent() )
-                        throw new ItemNotFoundException();
+    @RequestMapping(value = "/buy", method = {RequestMethod.POST, RequestMethod.GET})
+    public String addToCart(@ModelAttribute CartItem cartItem,
+                            @RequestParam(value = "id") Pet item) {
 
-                model.addAttribute( "cart_item", new CartItem() );
-                model.addAttribute( "animal", petService.getAnimal( id ).get() );
-                return "itemPage";
-        }
+        if (item == null)
+            throw new ItemNotFoundException();
 
-
-        @GetMapping ("/cat/{id}")
-        public String showAnimalsByType ( @PathVariable ("id") Type type,
-                                          @ModelAttribute ("searchForm") SearchForm searchForm,
-                                          Model model,
-                                          Pageable pageable )
-        {
-                model.addAttribute( "pet_list", petService.getAnimalByType( type, pageable ) );
-                return "petList";
-        }
+        cartItem.setItem(item);
+        petService.addToCart(cartItem);
+        return "redirect:/user/cart";
+    }
 
 
-        @GetMapping ("/edit/{id}")
-        public String editAnimal ( @PathVariable ("id") Pet animal,
-                                   Model model )
-        {
-                model.addAttribute( "animal", animal );
+    @GetMapping("/{id}")
+    public String showAnimal(@PathVariable long id,
+                             Model model) {
+        if (!petService.getAnimal(id).isPresent())
+            throw new ItemNotFoundException();
 
-                return "editPage";
-        }
-
-
-        @PostMapping ("/update")
-        public String updateAnimal ( @Valid @ModelAttribute ("animal") Pet animal,
-                                     BindingResult bindingResult,
-                                     MultipartFile[] multipartFile,
-                                     HttpServletRequest httpServletRequest ) throws IOException
-        {
-                if ( bindingResult.hasErrors() )
-                        return "editPage";
-
-                petService.update( animal, multipartFile, httpServletRequest );
-                return "redirect:/";
-        }
+        model.addAttribute("cart_item", new CartItem());
+        model.addAttribute("animal", petService.getAnimal(id).get());
+        return "itemPage";
+    }
 
 
-        @Secured ("ROLE_ADMIN")
-        @GetMapping ("/delete/{id}")
-        public String deleteFeed ( @PathVariable ("id") Pet pet )
-        {
-                petService.delete( pet );
-                return "redirect:/pet/list";
-        }
+    @GetMapping("/cat/{id}")
+    public String showAnimalsByType(@PathVariable("id") Type type,
+                                    @ModelAttribute("searchForm") SearchForm searchForm,
+                                    Model model,
+                                    Pageable pageable) {
+        model.addAttribute("pet_list", petService.getAnimalByType(type, pageable));
+        return "petList";
+    }
+
+
+    @GetMapping("/edit/{id}")
+    public String editAnimal(@PathVariable("id") Pet animal,
+                             Model model) {
+        model.addAttribute("animal", animal);
+
+        return "editPage";
+    }
+
+
+    @PostMapping("/update")
+    public String updateAnimal(@Valid @ModelAttribute("animal") Pet animal,
+                               BindingResult bindingResult,
+                               MultipartFile[] multipartFile,
+                               HttpServletRequest httpServletRequest) throws IOException {
+        if (bindingResult.hasErrors())
+            return "editPage";
+
+        petService.update(animal, multipartFile, httpServletRequest);
+        return "redirect:/";
+    }
+
+
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/delete/{id}")
+    public String deleteFeed(@PathVariable("id") Pet pet) {
+        petService.delete(pet);
+        return "redirect:/pet/list";
+    }
 }

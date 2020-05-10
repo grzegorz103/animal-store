@@ -14,23 +14,20 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-@Scope (proxyMode = ScopedProxyMode.TARGET_CLASS, value = "session")
+@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS, value = "session")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Cart
-{
-        private List<CartItem> items = new ArrayList<>();
+public class Cart {
+    private List<CartItem> items = new ArrayList<>();
 
-        public void addToCart ( CartItem item )
-        {
-                items.add( item );
-        }
+    public void addToCart(CartItem item) {
+        items.add(item);
+    }
 
-        public void removeFromCart ( Integer item )
-        {
-                this.items = this.items.stream()
-                        .filter( e -> e.getItem().getId().intValue() != item )
-                        .collect( Collectors.toList() );
-        }
+    public void removeFromCart(Integer item) {
+        this.items = this.items.stream()
+                .filter(e -> e.getItem().getId().intValue() != item)
+                .collect(Collectors.toList());
+    }
 }

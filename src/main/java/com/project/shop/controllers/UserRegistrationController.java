@@ -12,49 +12,43 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @Controller
-@SessionAttributes ("shoppingCart")
-public class UserRegistrationController
-{
-        private final UserService userService;
+@SessionAttributes("shoppingCart")
+public class UserRegistrationController {
+    private final UserService userService;
 
-        @Autowired
-        public UserRegistrationController ( UserService userService )
-        {
-                this.userService = userService;
-        }
+    @Autowired
+    public UserRegistrationController(UserService userService) {
+        this.userService = userService;
+    }
 
 
-        @GetMapping ("/registration")
-        private String showRegistrationForm ( Model model )
-        {
-                model.addAttribute( "user", new User() );
-                return "registrationForm";
-        }
+    @GetMapping("/registration")
+    private String showRegistrationForm(Model model) {
+        model.addAttribute("user", new User());
+        return "registrationForm";
+    }
 
 
-        @PostMapping ("/registration")
-        private String registerNewUser ( @Valid @ModelAttribute ("user") User userForm,
-                                         BindingResult bindingResult,
-                                         Model model )
-        {
-                if ( bindingResult.hasErrors() )
-                        return "registrationForm";
+    @PostMapping("/registration")
+    private String registerNewUser(@Valid @ModelAttribute("user") User userForm,
+                                   BindingResult bindingResult,
+                                   Model model) {
+        if (bindingResult.hasErrors())
+            return "registrationForm";
 
-                userService.save( userForm );
-                return "redirect:/acc_created";
-        }
-
-
-        @GetMapping ("/acc_created")
-        public String successRegistration ()
-        {
-                return "accountCreatedPage";
-        }
+        userService.save(userForm);
+        return "redirect:/acc_created";
+    }
 
 
-        @InitBinder
-        public void initBinder ( WebDataBinder binder )
-        {
-                binder.setDisallowedFields( "enabled", "id", "expired", "locked" );
-        }
+    @GetMapping("/acc_created")
+    public String successRegistration() {
+        return "accountCreatedPage";
+    }
+
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setDisallowedFields("enabled", "id", "expired", "locked");
+    }
 }

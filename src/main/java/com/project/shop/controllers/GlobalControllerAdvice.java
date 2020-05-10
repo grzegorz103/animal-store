@@ -15,56 +15,50 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
-public class GlobalControllerAdvice
-{
-        private final TypeRepository typeRepository;
+public class GlobalControllerAdvice {
+    private final TypeRepository typeRepository;
 
-        @Autowired
-        public GlobalControllerAdvice ( TypeRepository typeRepository )
-        {
-                this.typeRepository = typeRepository;
-        }
+    @Autowired
+    public GlobalControllerAdvice(TypeRepository typeRepository) {
+        this.typeRepository = typeRepository;
+    }
 
-        @ModelAttribute
-        public void mod ( Model model )
-        {
-                model.addAttribute( "item_types", typeRepository.findAll() );
-        }
+    @ModelAttribute
+    public void mod(Model model) {
+        model.addAttribute("item_types", typeRepository.findAll());
+    }
 
 
-        @ResponseStatus (HttpStatus.SERVICE_UNAVAILABLE)
-        @ExceptionHandler (InvalidUserDataException.class)
-        public String handleInvalidUserData ( Model model, Exception e,
-                                              HttpServletRequest req )
-        {
-                model.addAttribute( "exception", e );
-                model.addAttribute( "url", req.getRequestURL() );
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    @ExceptionHandler(InvalidUserDataException.class)
+    public String handleInvalidUserData(Model model, Exception e,
+                                        HttpServletRequest req) {
+        model.addAttribute("exception", e);
+        model.addAttribute("url", req.getRequestURL());
 
-                return "errors/invalidUserDataPage";
-        }
-
-
-        @ResponseStatus (HttpStatus.SERVICE_UNAVAILABLE)
-        @ExceptionHandler (InvalidDataException.class)
-        public String handleInvalidData ( Model model, Exception e,
-                                          HttpServletRequest req )
-        {
-                model.addAttribute( "exception", e );
-                model.addAttribute( "url", req.getRequestURL() );
-
-                return "errors/invalidDataPage";
-        }
+        return "errors/invalidUserDataPage";
+    }
 
 
-        @ResponseStatus (HttpStatus.NOT_FOUND)
-        @ExceptionHandler (ItemNotFoundException.class)
-        public String handleItemNotFound ( Model model, Exception e,
-                                          HttpServletRequest req )
-        {
-                model.addAttribute( "exception", e );
-                model.addAttribute( "url", req.getRequestURL() );
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    @ExceptionHandler(InvalidDataException.class)
+    public String handleInvalidData(Model model, Exception e,
+                                    HttpServletRequest req) {
+        model.addAttribute("exception", e);
+        model.addAttribute("url", req.getRequestURL());
 
-                return "errors/itemNotFoundPage";
-        }
+        return "errors/invalidDataPage";
+    }
+
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ItemNotFoundException.class)
+    public String handleItemNotFound(Model model, Exception e,
+                                     HttpServletRequest req) {
+        model.addAttribute("exception", e);
+        model.addAttribute("url", req.getRequestURL());
+
+        return "errors/itemNotFoundPage";
+    }
 
 }

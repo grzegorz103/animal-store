@@ -25,87 +25,77 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service ("accessoryService")
-public class AccessoryServiceImpl implements AccessoryService
-{
-        private final AccessoryRepository accessoryRepository;
+@Service("accessoryService")
+public class AccessoryServiceImpl implements AccessoryService {
+    private final AccessoryRepository accessoryRepository;
 
-        private final TypeRepository typeRepository;
+    private final TypeRepository typeRepository;
 
-        private final ShoppingService shoppingService;
+    private final ShoppingService shoppingService;
 
-        private final FileService fileService;
+    private final FileService fileService;
 
-        @Autowired
-        public AccessoryServiceImpl ( AccessoryRepository accessoryRepository, TypeRepository typeRepository, ShoppingService shoppingService, FileService fileService )
-        {
-                this.accessoryRepository = accessoryRepository;
-                this.typeRepository = typeRepository;
-                this.shoppingService = shoppingService;
-                this.fileService = fileService;
-        }
+    @Autowired
+    public AccessoryServiceImpl(AccessoryRepository accessoryRepository, TypeRepository typeRepository, ShoppingService shoppingService, FileService fileService) {
+        this.accessoryRepository = accessoryRepository;
+        this.typeRepository = typeRepository;
+        this.shoppingService = shoppingService;
+        this.fileService = fileService;
+    }
 
 
-        @Override
-        public void save ( Accessory accessory, MultipartFile[] multipartFile, HttpServletRequest httpRequest ) throws IOException
-        {
-                for ( MultipartFile file : multipartFile )
-                        fileService.save( file, httpRequest );
+    @Override
+    public void save(Accessory accessory, MultipartFile[] multipartFile, HttpServletRequest httpRequest) throws IOException {
+        for (MultipartFile file : multipartFile)
+            fileService.save(file, httpRequest);
 
-                List<String> images = Arrays.stream( multipartFile )
-                        .filter( e -> !e.isEmpty() )
-                        .map( MultipartFile::getOriginalFilename )
-                        .map( e -> "/uploads/" + e )
-                        .collect( Collectors.toList() );
+        List<String> images = Arrays.stream(multipartFile)
+                .filter(e -> !e.isEmpty())
+                .map(MultipartFile::getOriginalFilename)
+                .map(e -> "/uploads/" + e)
+                .collect(Collectors.toList());
 
-                accessory.setImages( images );
-                accessoryRepository.saveAndFlush( accessory );
-        }
-
-
-        @Override
-        public void update ( Accessory accessory, MultipartFile[] files, HttpServletRequest httpRequest ) throws IOException
-        {
-                save( accessory, files, httpRequest );
-        }
-
-        @Override
-        public void delete ( Accessory accessory )
-        {
-                accessory.setDeleted( Boolean.TRUE );
-                accessoryRepository.save( accessory );
-        }
+        accessory.setImages(images);
+        accessoryRepository.saveAndFlush(accessory);
+    }
 
 
-        @Override
-        public Optional<Accessory> getAccessory ( long id )
-        {
-                return accessoryRepository.findById( id );
-        }
+    @Override
+    public void update(Accessory accessory, MultipartFile[] files, HttpServletRequest httpRequest) throws IOException {
+        save(accessory, files, httpRequest);
+    }
 
-        @Override
-        public Page<Accessory> getAllAccessories ( Pageable pageable, SearchForm searchForm )
-        {
-                return accessoryRepository.findByFilter( searchForm.getPhrase(),
-                        searchForm.getPriceMax(), searchForm.getPriceMin(),
-                        pageable );
-        }
+    @Override
+    public void delete(Accessory accessory) {
+        accessory.setDeleted(Boolean.TRUE);
+        accessoryRepository.save(accessory);
+    }
 
-        @Override
-        public List<Type> getAllAccessoryTypes ()
-        {
-                return typeRepository.findAll();
-        }
 
-        @Override
-        public void addToCart ( CartItem accessory, Accessory item )
-        {
-                shoppingService.addToCart( accessory );
-        }
+    @Override
+    public Optional<Accessory> getAccessory(long id) {
+        return accessoryRepository.findById(id);
+    }
 
-        @Override
-        public Page<Accessory> getAccessoryByType ( Type type, Pageable pageable )
-        {
-                return accessoryRepository.findAllByType( type, pageable );
-        }
+    @Override
+    public Page<Accessory> getAllAccessories(Pageable pageable, SearchForm searchForm) {
+        return accessoryRepository.findByFilter(searchForm.getPhrase(),
+                searchForm.getPriceMax(), searchForm.getPriceMin(),
+                pageable);
+    }
+
+    @Override
+    public List<Type> getAllAccessoryTypes() {
+        return typeRepository.findAll();
+    }
+
+    @Override
+    public void addToCart(CartItem accessory, Accessory item) {
+        shoppingService.addToCart(accessory);
+    }
+
+    @Override
+    public Page<Accessory> getAccessoryByType(Type type, Pageable pageable) {
+        return accessoryRepository.findAllByType(type, pageable);
+    }
 }
