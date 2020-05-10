@@ -26,3 +26,15 @@ https://animal-store.herokuapp.com/
 * PostgreSQL, H2
 * JSP
 * Maven, Lombok
+
+## Setup
+### Prerequisites
+
+- Java 8 or greater
+
+### Deployment
+
+```
+$ mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+Run browser and head to ```http://localhost:4200```    
