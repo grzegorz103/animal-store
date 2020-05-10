@@ -12,50 +12,45 @@ import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@EnableGlobalMethodSecurity (securedEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer
-{
-        @Bean
-        public PasswordEncoder passwordEncoder ()
-        {
-                return new BCryptPasswordEncoder();
-        }
+@EnableGlobalMethodSecurity(securedEnabled = true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-        @Override
-        protected void configure ( HttpSecurity http ) throws Exception
-        {
-                http
-                        .authorizeRequests()
-                        .antMatchers( "registrationForm.html", "/statics/**", "/webjars/**", "/" ).permitAll()
-                        .antMatchers( "successVehicleFormView" ).permitAll()
-                        .antMatchers( "vehicle/list" ).permitAll();
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("registrationForm.html", "/statics/**", "/webjars/**", "/").permitAll()
+                .antMatchers("successVehicleFormView").permitAll()
+                .antMatchers("vehicle/list").permitAll();
 
-                http
-                        .formLogin()
-                        .loginPage( "/login" )
-                        .permitAll();
-                http
-                        .logout()
-                        .permitAll();
-                http
-                        .exceptionHandling()
-                        .accessDeniedHandler( createAccessDeniedHandler() );
-        }
+        http
+                .formLogin()
+                .loginPage("/login")
+                .permitAll();
+        http
+                .logout()
+                .permitAll();
+        http
+                .exceptionHandling()
+                .accessDeniedHandler(createAccessDeniedHandler());
+    }
 
-        private AccessDeniedHandler createAccessDeniedHandler ()
-        {
-                AccessDeniedHandlerImpl handler = new AccessDeniedHandlerImpl();
-                handler.setErrorPage( "/url_error403" );
+    private AccessDeniedHandler createAccessDeniedHandler() {
+        AccessDeniedHandlerImpl handler = new AccessDeniedHandlerImpl();
+        handler.setErrorPage("/url_error403");
 
-                return handler;
-        }
+        return handler;
+    }
 
-        @Override
-        public void addViewControllers ( ViewControllerRegistry registry )
-        {
-                registry.addRedirectViewController( "/", "/main" );
-                registry.addViewController( "/login" ).setViewName( "loginPage" );
-                registry.setOrder( Ordered.HIGHEST_PRECEDENCE );
-        }
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addRedirectViewController("/", "/main");
+        registry.addViewController("/login").setViewName("loginPage");
+        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    }
 }
 

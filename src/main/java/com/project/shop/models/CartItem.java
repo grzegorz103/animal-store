@@ -6,8 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @NoArgsConstructor
-public class CartItem
-{
-        private Item item;
-        private Integer amount;
+public class CartItem {
+    private Item item;
+    private Integer amount;
 }

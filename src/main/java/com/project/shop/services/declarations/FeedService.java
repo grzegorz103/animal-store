@@ -10,21 +10,20 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-public interface FeedService
-{
-        void save ( Feed feed, MultipartFile[] multipartFile, HttpServletRequest httpRequest ) throws IOException;
+public interface FeedService {
+    void save(Feed feed, MultipartFile[] multipartFile, HttpServletRequest httpRequest) throws IOException;
 
-        void update ( Feed feed, MultipartFile[] files, HttpServletRequest httpRequest ) throws IOException;
+    void update(Feed feed, MultipartFile[] files, HttpServletRequest httpRequest) throws IOException;
 
-        void delete ( Feed feed );
+    void delete(Feed feed);
 
-        Optional<Feed> getFeed ( long id );
+    Optional<Feed> getFeed(long id);
 
-        Page<Feed> getAllFeeds ( Pageable pageable, SearchForm searchForm );
+    Page<Feed> getAllFeeds(Pageable pageable, SearchForm searchForm);
 
-        List<Type> getAllFeedTypes ();
+    List<Type> getAllFeedTypes();
 
-        void addToCart ( CartItem feed, Feed item );
+    void addToCart(CartItem feed, Feed item);
 
-        Page<Feed> getFeedByType ( Type type, Pageable pageable );
+    Page<Feed> getFeedByType(Type type, Pageable pageable);
 }

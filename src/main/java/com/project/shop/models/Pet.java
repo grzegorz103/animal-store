@@ -8,16 +8,15 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table (name = "pets")
-@PrimaryKeyJoinColumn (name = "id")
+@Table(name = "pets")
+@PrimaryKeyJoinColumn(name = "id")
 @Getter
 @Setter
-public class Pet extends Item
-{
-        @Column (name = "age")
-        @NotNull
-        private Float age;
+public class Pet extends Item {
+    @Column(name = "age")
+    @NotNull
+    private Float age;
 
-        @Column (name = "sold")
-        private Boolean sold = false;
+    @Column(name = "sold")
+    private Boolean sold = false;
 }

@@ -22,34 +22,31 @@ import java.util.HashSet;
 import java.util.Optional;
 
 
-@Service ("userDetailsService")
-public class UserServiceImpl implements UserService
-{
-        private final UserRepository userRepository;
+@Service("userDetailsService")
+public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
 
-        private final RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-        private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-        @Autowired
-        public UserServiceImpl ( UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder )
-        {
-                this.userRepository = userRepository;
-                this.roleRepository = roleRepository;
-                this.passwordEncoder = passwordEncoder;
-        }
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
-        @Override
-        @Transactional (readOnly = true)
-        public UserDetails loadUserByUsername ( String s ) throws UsernameNotFoundException
-        {
-                User user = userRepository.findUserByUsername( s );
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        User user = userRepository.findUserByUsername(s);
 
-                if ( user == null ) throw new UsernameNotFoundException( s );
+        if (user == null) throw new UsernameNotFoundException(s);
 
-                return user;
-        }
+        return user;
+    }
 
 
         /*private UserDetails convertToUserDetails ( User user )
@@ -63,54 +60,48 @@ public class UserServiceImpl implements UserService
         }*/
 
 
-        @Override
-        public void save ( User user )
-        {
-                user.setRoles( new HashSet<>( Arrays.asList( roleRepository.findRoleByUserType( Role.UserTypes.ROLE_USER ) ) ) );
-                user.setEnabled( true );
-                user.setPasswordConfirm( null );
-                user.setPassword( passwordEncoder.encode( user.getPassword() ) );
-                userRepository.save( user );
-        }
+    @Override
+    public void save(User user) {
+        user.setRoles(new HashSet<>(Arrays.asList(roleRepository.findRoleByUserType(Role.UserTypes.ROLE_USER))));
+        user.setEnabled(true);
+        user.setPasswordConfirm(null);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
 
 
-        @Override
-        public void deleteUser ( User user )
-        {
-                userRepository.findById( user.getId() )
-                        .ifPresent( userToDelete -> userToDelete.setLocked( Boolean.TRUE ) );
-        }
+    @Override
+    public void deleteUser(User user) {
+        userRepository.findById(user.getId())
+                .ifPresent(userToDelete -> userToDelete.setLocked(Boolean.TRUE));
+    }
 
 
-        @Override
-        public boolean isLoginAvailable ( String password )
-        {
-                return !userRepository.existsUserByUsername( password );
-        }
+    @Override
+    public boolean isLoginAvailable(String password) {
+        return !userRepository.existsUserByUsername(password);
+    }
 
 
-        @Override
-        public boolean isPasswordsEqual ( String password, String passwordConfirm )
-        {
-                return StringUtils.equals( password, passwordConfirm );
-        }
+    @Override
+    public boolean isPasswordsEqual(String password, String passwordConfirm) {
+        return StringUtils.equals(password, passwordConfirm);
+    }
 
-        @Override
-        public Page<User> findAllUsers ( Pageable pageable )
-        {
-                return userRepository.findAll( pageable );
-        }
+    @Override
+    public Page<User> findAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
 
-        @Override
-        public void editUserLock ( User user )
-        {
-                user.setLocked( !user.getLocked() );
-                userRepository.save( user );
-        }
+    @Override
+    public void editUserLock(User user) {
+        user.setLocked(!user.getLocked());
+        userRepository.save(user);
+    }
 
-        @Override
-        public User find ( Long id )
-        {
-                Optional<User> a = userRepository.findById( id );
-                return a.orElse( null );        }
+    @Override
+    public User find(Long id) {
+        Optional<User> a = userRepository.findById(id);
+        return a.orElse(null);
+    }
 }

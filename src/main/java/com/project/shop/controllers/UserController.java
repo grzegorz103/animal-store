@@ -18,92 +18,83 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping ("/user")
-public class UserController
-{
-        private final ShoppingService shoppingService;
+@RequestMapping("/user")
+public class UserController {
+    private final ShoppingService shoppingService;
 
-        private final UserService userService;
+    private final UserService userService;
 
-        private final AddressService addressService;
+    private final AddressService addressService;
 
-        @Autowired
-        public UserController ( ShoppingService shoppingService, UserService userService, AddressService addressService )
-        {
-                this.shoppingService = shoppingService;
-                this.userService = userService;
-                this.addressService = addressService;
-        }
+    @Autowired
+    public UserController(ShoppingService shoppingService, UserService userService, AddressService addressService) {
+        this.shoppingService = shoppingService;
+        this.userService = userService;
+        this.addressService = addressService;
+    }
 
 
-        @GetMapping ("/cart")
-        public String getShoppingCart ( Model model )
-        {
-                model.addAttribute( "cart_items", shoppingService.getCart() );
-                return "cartPage";
-        }
+    @GetMapping("/cart")
+    public String getShoppingCart(Model model) {
+        model.addAttribute("cart_items", shoppingService.getCart());
+        return "cartPage";
+    }
 
 
-        @GetMapping ("/orders")
-        public String getOrders ( Model model )
-        {
-                model.addAttribute( "orders", shoppingService.getUserOrders() );
-                return "ordersPage";
-        }
+    @GetMapping("/orders")
+    public String getOrders(Model model) {
+        model.addAttribute("orders", shoppingService.getUserOrders());
+        return "ordersPage";
+    }
 
-        //------ Panel admina
+    //------ Panel admina
 
-        @GetMapping ("/summary")
-        @Secured ("ROLE_ADMIN")
-        public String getSummary ( Model model,
-                                   Pageable pageable )
-        {
-                model.addAttribute( "orders", shoppingService.getAllOrders() );
-                model.addAttribute( "animal", new Pet() );
-                model.addAttribute( "feed", new Feed() );
-                model.addAttribute( "accessory", new Accessory() );
-                return "adminPage";
-        }
+    @GetMapping("/summary")
+    @Secured("ROLE_ADMIN")
+    public String getSummary(Model model,
+                             Pageable pageable) {
+        model.addAttribute("orders", shoppingService.getAllOrders());
+        model.addAttribute("animal", new Pet());
+        model.addAttribute("feed", new Feed());
+        model.addAttribute("accessory", new Accessory());
+        return "adminPage";
+    }
 
 
-        @Secured ("ROLE_ADMIN")
-        @GetMapping ("/list")
-        public String getUserList ( Model model,
-                                    Pageable pageable )
-        {
-                model.addAttribute( "list", userService.findAllUsers( pageable ) );
-                return "userListPage";
-        }
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/list")
+    public String getUserList(Model model,
+                              Pageable pageable) {
+        model.addAttribute("list", userService.findAllUsers(pageable));
+        return "userListPage";
+    }
 
 
-        @Secured ("ROLE_ADMIN")
-        @GetMapping ("/edit/{id}")
-        public String editUserState ( @PathVariable ("id") User user )
-        {
-                userService.editUserLock( user );
-                return "redirect:/user/list";
-        }
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/edit/{id}")
+    public String editUserState(@PathVariable("id") User user) {
+        userService.editUserLock(user);
+        return "redirect:/user/list";
+    }
 
-        //------ PANEL USERA
+    //------ PANEL USERA
 
-        @GetMapping ("/details")
-        public String changeUserDetails ( Model model )
-        {
-                User user = ( User ) SecurityContextHolder.getContext()
-                        .getAuthentication().getPrincipal();
-                User userFromDb = userService.find( user.getId() );
-                model.addAttribute( "user", userFromDb.getAddress() );
-                return "userPage";
-        }
+    @GetMapping("/details")
+    public String changeUserDetails(Model model) {
+        User user = (User) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal();
+        User userFromDb = userService.find(user.getId());
+        model.addAttribute("user", userFromDb.getAddress());
+        return "userPage";
+    }
 
 
-        @PostMapping ("/update")
-        public String updateUser ( @Valid @ModelAttribute ("userForm") Address address,
-                                   BindingResult bindingResult )
-        {
-                if ( bindingResult.hasErrors() )
-                        return "userPage";
-                addressService.update( address );
-                return "redirect:/";
-        }
+    @PostMapping("/update")
+    public String updateUser(@Valid @ModelAttribute("userForm") Address address,
+                             BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return "userPage";
+        addressService.update(address);
+        return "redirect:/";
+    }
 }

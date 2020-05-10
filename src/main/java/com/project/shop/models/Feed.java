@@ -13,15 +13,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table (name = "feeds")
+@Table(name = "feeds")
 @Data
 @NoArgsConstructor
-@PrimaryKeyJoinColumn (name = "id")
-public class Feed extends Item
-{
-        @Column (name = "grams")
-        @NotNull
-        @Min (1)
-        @Max (1000000)
-        private Float gram;
+@PrimaryKeyJoinColumn(name = "id")
+public class Feed extends Item {
+    @Column(name = "grams")
+    @NotNull
+    @Min(1)
+    @Max(1000000)
+    private Float gram;
 }

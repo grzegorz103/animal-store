@@ -11,22 +11,21 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-public interface AccessoryService
-{
-        void save ( Accessory feed, MultipartFile[] multipartFile, HttpServletRequest httpRequest ) throws IOException;
+public interface AccessoryService {
+    void save(Accessory feed, MultipartFile[] multipartFile, HttpServletRequest httpRequest) throws IOException;
 
-        void update ( Accessory accessory, MultipartFile[] files, HttpServletRequest httpRequest ) throws IOException;
+    void update(Accessory accessory, MultipartFile[] files, HttpServletRequest httpRequest) throws IOException;
 
-        void delete ( Accessory accessory );
+    void delete(Accessory accessory);
 
-        Optional<Accessory> getAccessory ( long id );
+    Optional<Accessory> getAccessory(long id);
 
-        Page<Accessory> getAllAccessories ( Pageable pageable, SearchForm searchForm );
+    Page<Accessory> getAllAccessories(Pageable pageable, SearchForm searchForm);
 
-        List<Type> getAllAccessoryTypes ();
+    List<Type> getAllAccessoryTypes();
 
-        void addToCart ( CartItem accessory, Accessory item );
+    void addToCart(CartItem accessory, Accessory item);
 
-        Page<Accessory> getAccessoryByType ( Type type, Pageable pageable );
+    Page<Accessory> getAccessoryByType(Type type, Pageable pageable);
 
 }

@@ -9,21 +9,19 @@ import java.util.Set;
 
 
 @Entity
-@Table (name = "animal_categories")
+@Table(name = "animal_categories")
 @Data
 @NoArgsConstructor
-public class Type
-{
-        @Id
-        @GeneratedValue (strategy = GenerationType.IDENTITY)
-        private Long id;
+public class Type {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @Column (name = "category")
-        private String category;
+    @Column(name = "category")
+    private String category;
 
-        public Type ( String category )
-        {
-                this.category = category;
-        }
+    public Type(String category) {
+        this.category = category;
+    }
 
 }

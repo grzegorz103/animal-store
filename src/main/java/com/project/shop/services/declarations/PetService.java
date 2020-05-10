@@ -11,22 +11,21 @@ import java.util.List;
 import java.util.Optional;
 
 
-public interface PetService
-{
-        void save ( Pet pet, MultipartFile[] multipartFile, HttpServletRequest httpRequest ) throws IOException;
+public interface PetService {
+    void save(Pet pet, MultipartFile[] multipartFile, HttpServletRequest httpRequest) throws IOException;
 
-        void update ( Pet pet, MultipartFile[] files, HttpServletRequest httpRequest ) throws IOException;
+    void update(Pet pet, MultipartFile[] files, HttpServletRequest httpRequest) throws IOException;
 
-        void delete ( Pet pet );
+    void delete(Pet pet);
 
-        Optional<Pet> getAnimal ( long id );
+    Optional<Pet> getAnimal(long id);
 
-        Page<Pet> getAllPets ( Pageable pageable, SearchForm searchForm );
+    Page<Pet> getAllPets(Pageable pageable, SearchForm searchForm);
 
-        List<Type> getAllPetTypes ();
+    List<Type> getAllPetTypes();
 
-        void addToCart ( CartItem pet );
+    void addToCart(CartItem pet);
 
-        Page<Pet> getAnimalByType ( Type type, Pageable pageable );
+    Page<Pet> getAnimalByType(Type type, Pageable pageable);
 
 }

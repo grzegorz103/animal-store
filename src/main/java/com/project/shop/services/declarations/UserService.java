@@ -6,19 +6,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface UserService extends UserDetailsService
-{
-        void save ( User user );
+public interface UserService extends UserDetailsService {
+    void save(User user);
 
-        void deleteUser ( User user );
+    void deleteUser(User user);
 
-        boolean isLoginAvailable ( String username );
+    boolean isLoginAvailable(String username);
 
-        boolean isPasswordsEqual ( String password, String passwordConfirm );
+    boolean isPasswordsEqual(String password, String passwordConfirm);
 
-        Page<User> findAllUsers ( Pageable pageable );
+    Page<User> findAllUsers(Pageable pageable);
 
-        void editUserLock ( User user );
+    void editUserLock(User user);
 
-        User find ( Long id );
+    User find(Long id);
 }

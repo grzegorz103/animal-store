@@ -13,19 +13,17 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 @Service
-public class FileServiceImpl implements FileService
-{
-        @Autowired
-        private ResourceLoader resourceLoader;
+public class FileServiceImpl implements FileService {
+    @Autowired
+    private ResourceLoader resourceLoader;
 
-        @Override
-        public void save ( MultipartFile multipartFile, HttpServletRequest httpRequest ) throws IOException
-        {
-                if ( multipartFile.isEmpty() )
-                        return;
+    @Override
+    public void save(MultipartFile multipartFile, HttpServletRequest httpRequest) throws IOException {
+        if (multipartFile.isEmpty())
+            return;
 
-                String filePath = httpRequest.getServletContext().getRealPath( "/uploads" );
-                File f1 = new File( filePath + "/" + multipartFile.getOriginalFilename() );
-                multipartFile.transferTo( f1 );
-        }
+        String filePath = httpRequest.getServletContext().getRealPath("/uploads");
+        File f1 = new File(filePath + "/" + multipartFile.getOriginalFilename());
+        multipartFile.transferTo(f1);
+    }
 }

@@ -9,7 +9,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDTO
-{
-        private List<Order> listOrders;
+public class OrderDTO {
+    private List<Order> listOrders;
 }
